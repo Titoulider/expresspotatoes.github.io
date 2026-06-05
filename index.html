@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Express Potatoes — بطاطا طازجة جاهزة للطهي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #F97316;
+    --orange-dark: #C2410C;
+    --orange-light: #FED7AA;
+    --yellow: #FBBF24;
+    --cream: #FFFBEB;
+    --brown: #78350F;
+    --brown-light: #92400E;
+    --dark: #1C0A00;
+    --white: #FFFFFF;
+    --gray: #6B7280;
+    --light-gray: #F9FAFB;
+    --green: #15803D;
+    --green-light: #DCFCE7;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Cairo', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    overflow-x: hidden;
+  }
+
+  /* NAVBAR */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    background: rgba(255,251,235,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 2px solid var(--orange-light);
+    padding: 0.9rem 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 1.5rem; font-weight: 900;
+    color: var(--orange-dark);
+  }
+  .nav-logo .emoji { font-size: 1.8rem; }
+  .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+  .nav-links a {
+    text-decoration: none; color: var(--brown);
+    font-weight: 600; font-size: 0.95rem;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--orange); }
+  .nav-cta {
+    background: var(--orange); color: white;
+    border: none; padding: 0.6rem 1.4rem;
+    border-radius: 50px; font-family: 'Cairo', sans-serif;
+    font-size: 0.9rem; font-weight: 700; cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .nav-cta:hover { background: var(--orange-dark); transform: scale(1.04); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #FFF7ED 0%, #FFFBEB 50%, #FEF3C7 100%);
+    display: flex; align-items: center;
+    padding: 6rem 2rem 3rem;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -100px; left: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(249,115,22,0.12) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; bottom: -80px; right: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(251,191,36,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem; align-items: center; width: 100%;
+    position: relative; z-index: 1;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--orange-light); color: var(--orange-dark);
+    padding: 0.4rem 1rem; border-radius: 50px;
+    font-size: 0.85rem; font-weight: 700;
+    margin-bottom: 1.2rem;
+  }
+  .hero h1 {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 3.5rem; font-weight: 900;
+    line-height: 1.15; color: var(--dark);
+    margin-bottom: 1.2rem;
+  }
+  .hero h1 span { color: var(--orange); }
+  .hero p {
+    font-size: 1.05rem; line-height: 1.8;
+    color: var(--brown-light); margin-bottom: 2rem;
+  }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--orange); color: white;
+    padding: 0.85rem 2rem; border-radius: 50px;
+    font-family: 'Cairo', sans-serif; font-weight: 700;
+    font-size: 1rem; border: none; cursor: pointer;
+    transition: all 0.2s; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+  }
+  .btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(249,115,22,0.35); }
+  .btn-secondary {
+    background: transparent; color: var(--orange);
+    padding: 0.85rem 2rem; border-radius: 50px;
+    font-family: 'Cairo', sans-serif; font-weight: 700;
+    font-size: 1rem; border: 2px solid var(--orange); cursor: pointer;
+    transition: all 0.2s; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+  }
+  .btn-secondary:hover { background: var(--orange-light); }
+  .hero-visual {
+    display: flex; flex-direction: column; gap: 1rem;
+    align-items: center;
+  }
+  .hero-card {
+    background: white;
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 30px rgba(249,115,22,0.12);
+    width: 100%;
+    border: 1.5px solid var(--orange-light);
+  }
+  .hero-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+    width: 100%;
+  }
+  .stat-card {
+    background: white; border-radius: 16px;
+    padding: 1.2rem; text-align: center;
+    border: 1.5px solid var(--orange-light);
+    box-shadow: 0 4px 12px rgba(249,115,22,0.08);
+  }
+  .stat-num {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 2rem; font-weight: 900;
+    color: var(--orange);
+  }
+  .stat-label { font-size: 0.78rem; color: var(--gray); font-weight: 600; }
+  .hero-emoji-big { font-size: 5rem; margin-bottom: 0.5rem; display: block; text-align: center; }
+  .hero-card-title { font-weight: 700; font-size: 1rem; color: var(--brown); margin-bottom: 0.5rem; }
+  .freshness-bar { height: 8px; background: #FEF3C7; border-radius: 50px; overflow: hidden; margin-top: 0.5rem; }
+  .freshness-fill { height: 100%; background: linear-gradient(90deg, var(--orange), var(--yellow)); border-radius: 50px; width: 85%; }
+
+  /* SECTION COMMONS */
+  section { padding: 5rem 2rem; }
+  .section-inner { max-width: 1200px; margin: 0 auto; }
+  .section-tag {
+    display: inline-block;
+    background: var(--orange-light); color: var(--orange-dark);
+    padding: 0.3rem 1rem; border-radius: 50px;
+    font-size: 0.8rem; font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 2.3rem; font-weight: 900;
+    color: var(--dark); margin-bottom: 0.8rem;
+  }
+  .section-sub { color: var(--gray); font-size: 1rem; line-height: 1.7; max-width: 600px; }
+
+  /* PRODUCTS */
+  #products { background: white; }
+  .products-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; margin-top: 2.5rem;
+  }
+  .product-card {
+    border-radius: 20px; overflow: hidden;
+    border: 2px solid var(--orange-light);
+    transition: all 0.25s; cursor: pointer;
+    background: var(--cream);
+  }
+  .product-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(249,115,22,0.15); border-color: var(--orange); }
+  .product-img {
+    height: 180px; display: flex; align-items: center;
+    justify-content: center; font-size: 5rem;
+    background: linear-gradient(135deg, #FEF3C7, #FFEDD5);
+  }
+  .product-body { padding: 1.2rem; }
+  .product-tag {
+    background: var(--orange-light); color: var(--orange-dark);
+    padding: 0.2rem 0.7rem; border-radius: 50px;
+    font-size: 0.75rem; font-weight: 700;
+    display: inline-block; margin-bottom: 0.6rem;
+  }
+  .product-name { font-size: 1.15rem; font-weight: 800; margin-bottom: 0.4rem; color: var(--dark); }
+  .product-desc { font-size: 0.88rem; color: var(--gray); line-height: 1.6; margin-bottom: 1rem; }
+  .product-sizes { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .size-badge {
+    background: white; border: 1.5px solid var(--orange-light);
+    color: var(--brown); padding: 0.25rem 0.6rem;
+    border-radius: 6px; font-size: 0.78rem; font-weight: 600;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .size-badge:hover, .size-badge.active { background: var(--orange); border-color: var(--orange); color: white; }
+  .product-price { font-family: 'Tajawal', sans-serif; font-size: 1.3rem; font-weight: 900; color: var(--orange); }
+  .product-price span { font-size: 0.85rem; color: var(--gray); font-weight: 500; }
+  .add-btn {
+    width: 100%; padding: 0.65rem;
+    background: var(--orange); color: white;
+    border: none; border-radius: 10px;
+    font-family: 'Cairo', sans-serif; font-weight: 700;
+    font-size: 0.9rem; cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 0.8rem;
+  }
+  .add-btn:hover { background: var(--orange-dark); }
+
+  /* CALCULATOR */
+  #calculator { background: var(--dark); }
+  #calculator .section-title { color: white; }
+  #calculator .section-sub { color: rgba(255,255,255,0.6); }
+  .calc-box {
+    background: rgba(255,255,255,0.05);
+    border: 1.5px solid rgba(249,115,22,0.3);
+    border-radius: 24px; padding: 2.5rem;
+    margin-top: 2.5rem;
+  }
+  .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+  .calc-field { margin-bottom: 1.5rem; }
+  .calc-label { color: rgba(255,255,255,0.8); font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; display: block; }
+  .calc-input {
+    width: 100%; padding: 0.8rem 1rem;
+    background: rgba(255,255,255,0.08);
+    border: 1.5px solid rgba(249,115,22,0.25);
+    border-radius: 10px; color: white;
+    font-family: 'Cairo', sans-serif; font-size: 1rem;
+    outline: none; transition: border-color 0.2s;
+  }
+  .calc-input:focus { border-color: var(--orange); }
+  .calc-input option { background: #1C0A00; }
+  .calc-result {
+    background: linear-gradient(135deg, rgba(249,115,22,0.15), rgba(251,191,36,0.1));
+    border: 1.5px solid var(--orange);
+    border-radius: 20px; padding: 2rem;
+  }
+  .result-label { color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-bottom: 0.3rem; }
+  .result-value { font-family: 'Tajawal', sans-serif; font-size: 2.5rem; font-weight: 900; color: var(--yellow); }
+  .result-sub { color: var(--orange); font-size: 0.9rem; margin-top: 0.3rem; font-weight: 600; }
+  .discount-badge {
+    display: inline-block; background: var(--green); color: white;
+    padding: 0.3rem 0.8rem; border-radius: 50px;
+    font-size: 0.8rem; font-weight: 700; margin-top: 0.8rem;
+  }
+  .calc-btn {
+    width: 100%; padding: 1rem;
+    background: var(--orange); color: white;
+    border: none; border-radius: 12px;
+    font-family: 'Cairo', sans-serif; font-size: 1rem; font-weight: 700;
+    cursor: pointer; margin-top: 1rem;
+    transition: background 0.2s;
+  }
+  .calc-btn:hover { background: var(--orange-dark); }
+
+  /* WHY US */
+  #why { background: var(--cream); }
+  .why-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-top: 2.5rem; }
+  .why-card {
+    background: white; border-radius: 20px;
+    padding: 1.8rem;
+    border: 1.5px solid var(--orange-light);
+    transition: all 0.2s;
+  }
+  .why-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(249,115,22,0.1); }
+  .why-icon { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+  .why-title { font-size: 1.1rem; font-weight: 800; color: var(--dark); margin-bottom: 0.5rem; }
+  .why-text { color: var(--gray); font-size: 0.92rem; line-height: 1.7; }
+  .why-highlight {
+    background: var(--green-light); color: var(--green);
+    padding: 0.2rem 0.6rem; border-radius: 6px;
+    font-size: 0.82rem; font-weight: 700;
+    display: inline-block; margin-top: 0.7rem;
+  }
+
+  /* SUBSCRIPTIONS */
+  #subscriptions { background: white; }
+  .plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2.5rem; }
+  .plan-card {
+    border-radius: 20px; padding: 2rem;
+    border: 2px solid var(--orange-light);
+    text-align: center; position: relative;
+    transition: all 0.25s;
+  }
+  .plan-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(249,115,22,0.12); }
+  .plan-card.featured {
+    border-color: var(--orange);
+    background: linear-gradient(135deg, #FFF7ED, #FFFBEB);
+  }
+  .popular-badge {
+    position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    background: var(--orange); color: white;
+    padding: 0.3rem 1rem; border-radius: 50px;
+    font-size: 0.78rem; font-weight: 700;
+    white-space: nowrap;
+  }
+  .plan-name { font-size: 1rem; font-weight: 700; color: var(--gray); margin-bottom: 0.5rem; }
+  .plan-price { font-family: 'Tajawal', sans-serif; font-size: 2.2rem; font-weight: 900; color: var(--orange); }
+  .plan-price small { font-size: 0.85rem; color: var(--gray); font-family: 'Cairo', sans-serif; }
+  .plan-qty { color: var(--brown); font-weight: 700; margin: 0.5rem 0 1.2rem; font-size: 0.95rem; }
+  .plan-features { list-style: none; text-align: right; margin-bottom: 1.5rem; }
+  .plan-features li { padding: 0.4rem 0; font-size: 0.88rem; color: var(--gray); display: flex; gap: 0.5rem; align-items: center; }
+  .plan-features li::before { content: '✓'; color: var(--green); font-weight: 900; flex-shrink: 0; }
+  .plan-btn {
+    width: 100%; padding: 0.75rem;
+    background: var(--orange-light); color: var(--orange-dark);
+    border: 2px solid var(--orange); border-radius: 10px;
+    font-family: 'Cairo', sans-serif; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .plan-card.featured .plan-btn { background: var(--orange); color: white; }
+  .plan-btn:hover { background: var(--orange); color: white; }
+
+  /* TESTIMONIALS */
+  #testimonials { background: linear-gradient(135deg, #FFF7ED, #FEF3C7); }
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2.5rem; }
+  .testimonial-card {
+    background: white; border-radius: 20px;
+    padding: 1.8rem;
+    border: 1.5px solid var(--orange-light);
+    position: relative;
+  }
+  .quote-mark { font-size: 3rem; color: var(--orange-light); line-height: 1; font-family: Georgia, serif; }
+  .testimonial-text { font-size: 0.9rem; color: var(--gray); line-height: 1.8; margin: 0.5rem 0 1.2rem; }
+  .testimonial-author { display: flex; align-items: center; gap: 0.8rem; }
+  .author-avatar {
+    width: 46px; height: 46px; border-radius: 50%;
+    background: var(--orange-light); display: flex;
+    align-items: center; justify-content: center;
+    font-size: 1.3rem;
+  }
+  .author-name { font-weight: 700; font-size: 0.9rem; color: var(--dark); }
+  .author-role { font-size: 0.78rem; color: var(--gray); }
+  .stars { color: var(--yellow); font-size: 0.85rem; }
+
+  /* CONTACT */
+  #contact { background: var(--dark); }
+  #contact .section-title { color: white; }
+  #contact .section-sub { color: rgba(255,255,255,0.6); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 2.5rem; align-items: start; }
+  .contact-info { display: flex; flex-direction: column; gap: 1.2rem; }
+  .contact-item {
+    display: flex; gap: 1rem; align-items: flex-start;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(249,115,22,0.2);
+    border-radius: 14px; padding: 1rem 1.2rem;
+  }
+  .contact-icon { font-size: 1.5rem; }
+  .contact-label { color: rgba(255,255,255,0.5); font-size: 0.8rem; margin-bottom: 0.2rem; }
+  .contact-value { color: white; font-weight: 600; font-size: 0.95rem; }
+  .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+  .form-input {
+    padding: 0.85rem 1rem;
+    background: rgba(255,255,255,0.08);
+    border: 1.5px solid rgba(249,115,22,0.2);
+    border-radius: 10px; color: white;
+    font-family: 'Cairo', sans-serif; font-size: 0.95rem;
+    outline: none; transition: border-color 0.2s;
+    width: 100%;
+  }
+  .form-input::placeholder { color: rgba(255,255,255,0.35); }
+  .form-input:focus { border-color: var(--orange); }
+  textarea.form-input { resize: vertical; min-height: 120px; }
+  .form-submit {
+    padding: 1rem;
+    background: var(--orange); color: white;
+    border: none; border-radius: 12px;
+    font-family: 'Cairo', sans-serif; font-size: 1rem; font-weight: 700;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .form-submit:hover { background: var(--orange-dark); }
+
+  /* FOOTER */
+  footer {
+    background: #110500;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    color: rgba(255,255,255,0.4);
+    font-size: 0.85rem;
+  }
+  footer strong { color: var(--orange); }
+
+  /* CART FLOAT */
+  .cart-float {
+    position: fixed; bottom: 2rem; left: 2rem;
+    background: var(--orange); color: white;
+    border: none; border-radius: 50px;
+    padding: 0.9rem 1.5rem;
+    font-family: 'Cairo', sans-serif; font-weight: 700;
+    font-size: 0.95rem; cursor: pointer;
+    box-shadow: 0 8px 25px rgba(249,115,22,0.4);
+    display: flex; align-items: center; gap: 0.5rem;
+    z-index: 50; transition: all 0.2s;
+  }
+  .cart-float:hover { background: var(--orange-dark); transform: scale(1.05); }
+  .cart-count {
+    background: white; color: var(--orange);
+    border-radius: 50%; width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; font-weight: 900;
+  }
+
+  /* NOTIFICATION */
+  .notif {
+    position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
+    background: var(--green); color: white;
+    padding: 0.7rem 1.5rem; border-radius: 50px;
+    font-weight: 700; font-size: 0.9rem;
+    z-index: 200; opacity: 0; transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .notif.show { opacity: 1; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 2.5rem; }
+    .products-grid { grid-template-columns: 1fr 1fr; }
+    .plans-grid { grid-template-columns: 1fr; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .why-grid { grid-template-columns: 1fr; }
+    .calc-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
+  @media (max-width: 600px) {
+    .products-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 2rem; }
+    .hero-stats { grid-template-columns: 1fr 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-logo">
+    <span class="emoji">🥔</span>
+    <span>Express Potatoes</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#products">المنتجات</a></li>
+    <li><a href="#calculator">احسب طلبك</a></li>
+    <li><a href="#why">لماذا نحن؟</a></li>
+    <li><a href="#subscriptions">الاشتراكات</a></li>
+    <li><a href="#testimonials">آراء العملاء</a></li>
+  </ul>
+  <button class="nav-cta" onclick="scrollToSection('contact')">تواصل معنا</button>
+</nav>
+
+<!-- NOTIFICATION -->
+<div class="notif" id="notif">✓ تمت الإضافة إلى السلة</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge">🌱 مباشرة من المزرعة إلى مطبخك</div>
+      <h1>بطاطا طازجة،<br><span>جاهزة للطهي</span><br>فوراً! 🔥</h1>
+      <p>نوفر عليك وقت التقشير والتقطيع — بطاطا مغسولة، مقشرة، مقطعة ومعبأة بتقنية سحب الهواء. صافي وزن 100% بدون قشور أو تالف.</p>
+      <div class="hero-btns">
+        <a href="#products" class="btn-primary">🛒 اطلب الآن</a>
+        <a href="#why" class="btn-secondary">اكتشف مميزاتنا</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card">
+        <span class="hero-emoji-big">🥔</span>
+        <div class="hero-card-title">طازجة لمدة 7 أيام في التبريد</div>
+        <div style="font-size:0.85rem;color:var(--gray)">تقنية Vacuum تحفظ الطراوة والقيمة الغذائية</div>
+        <div class="freshness-bar"><div class="freshness-fill"></div></div>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-card">
+          <div class="stat-num">0%</div>
+          <div class="stat-label">هدر في الوزن</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">7</div>
+          <div class="stat-label">أيام طازجة</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">وزن صافي</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products">
+  <div class="section-inner">
+    <div class="section-tag">🛍️ كتالوج المنتجات</div>
+    <h2 class="section-title">اختر منتجك المناسب</h2>
+    <p class="section-sub">كل منتج مُعد بعناية لخدمة احتياجات مختلفة — مطاعم، فنادق، أو منازل</p>
+    <div class="products-grid">
+
+      <div class="product-card">
+        <div class="product-img">🍟</div>
+        <div class="product-body">
+          <span class="product-tag">الأكثر طلباً</span>
+          <div class="product-name">أصابع البطاطا (French Fries)</div>
+          <div class="product-desc">مقطعة بدقة آلية — مثالية للمطاعم السريعة. تتمتع بقرمشة ذهبية مثالية بعد القلي.</div>
+          <div class="product-sizes">
+            <span class="size-badge active" onclick="selectSize(this)">9×9 ملم</span>
+            <span class="size-badge" onclick="selectSize(this)">12×12 ملم</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="product-price">450 دج <span>/ كغ</span></div>
+            <div style="font-size:0.78rem;color:var(--green);font-weight:700">متوفر</div>
+          </div>
+          <button class="add-btn" onclick="addToCart('أصابع البطاطا')">+ أضف للطلب</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img">🥔</div>
+        <div class="product-body">
+          <span class="product-tag">للمطاعم التقليدية</span>
+          <div class="product-name">البطاطا الدائرية (Rondelles)</div>
+          <div class="product-desc">شرائح دائرية منتظمة — رائعة للمطاعم التقليدية والطهي المنزلي المتميز.</div>
+          <div class="product-sizes">
+            <span class="size-badge active" onclick="selectSize(this)">كيس 1 كغ</span>
+            <span class="size-badge" onclick="selectSize(this)">كيس 5 كغ</span>
+            <span class="size-badge" onclick="selectSize(this)">كيس 10 كغ</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="product-price">400 دج <span>/ كغ</span></div>
+            <div style="font-size:0.78rem;color:var(--green);font-weight:700">متوفر</div>
+          </div>
+          <button class="add-btn" onclick="addToCart('البطاطا الدائرية')">+ أضف للطلب</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img">🎲</div>
+        <div class="product-body">
+          <span class="product-tag">للفنادق والشوربات</span>
+          <div class="product-name">مكعبات البطاطا (Cubes)</div>
+          <div class="product-desc">مكعبات منتظمة مثالية للشوربات، السلطات، وتجهيزات المطابخ الفندقية الاحترافية.</div>
+          <div class="product-sizes">
+            <span class="size-badge active" onclick="selectSize(this)">2×2 سم</span>
+            <span class="size-badge" onclick="selectSize(this)">3×3 سم</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="product-price">380 دج <span>/ كغ</span></div>
+            <div style="font-size:0.78rem;color:var(--green);font-weight:700">متوفر</div>
+          </div>
+          <button class="add-btn" onclick="addToCart('مكعبات البطاطا')">+ أضف للطلب</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CALCULATOR -->
+<section id="calculator">
+  <div class="section-inner">
+    <div class="section-tag" style="background:rgba(249,115,22,0.2);color:var(--orange)">🧮 حاسبة الطلبات</div>
+    <h2 class="section-title">احسب طلبك وسعرك الدقيق</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,0.6)">خصص كميتك الأسبوعية وستحصل على سعر خاص للطلبات المستمرة</p>
+    <div class="calc-box">
+      <div class="calc-grid">
+        <div>
+          <div class="calc-field">
+            <label class="calc-label">نوع المنتج</label>
+            <select class="calc-input" id="calc-product" onchange="calculate()">
+              <option value="450">أصابع البطاطا — 450 دج/كغ</option>
+              <option value="400">البطاطا الدائرية — 400 دج/كغ</option>
+              <option value="380">مكعبات البطاطا — 380 دج/كغ</option>
+            </select>
+          </div>
+          <div class="calc-field">
+            <label class="calc-label">الكمية يومياً (كغ)</label>
+            <input type="number" class="calc-input" id="calc-qty" value="10" min="1" oninput="calculate()">
+          </div>
+          <div class="calc-field">
+            <label class="calc-label">عدد أيام التوصيل في الأسبوع</label>
+            <select class="calc-input" id="calc-days" onchange="calculate()">
+              <option value="2">مرتين / أسبوع</option>
+              <option value="3">3 مرات / أسبوع</option>
+              <option value="5">5 مرات / أسبوع (يومي)</option>
+              <option value="7" selected>يومي (7 أيام)</option>
+            </select>
+          </div>
+          <button class="calc-btn" onclick="calculate()">احسب الآن 🧮</button>
+        </div>
+        <div class="calc-result">
+          <div class="result-label">الكمية الأسبوعية</div>
+          <div class="result-value" id="weekly-qty">70 كغ</div>
+          <div style="height:1.5rem"></div>
+          <div class="result-label">السعر الأسبوعي (قبل الخصم)</div>
+          <div class="result-value" id="weekly-price" style="font-size:1.8rem">31,500 دج</div>
+          <div style="height:1rem"></div>
+          <div class="result-label">سعر بعد خصم الاشتراك</div>
+          <div class="result-value" id="discounted-price" style="color:var(--orange)">28,350 دج</div>
+          <div class="discount-badge" id="discount-label">✓ خصم 10% على الطلبات المستمرة</div>
+          <div style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin-top:1rem">* يشمل التوصيل إلى مقر عملك</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section id="why">
+  <div class="section-inner">
+    <div class="section-tag">⭐ مميزاتنا التنافسية</div>
+    <h2 class="section-title">لماذا تختار Express Potatoes؟</h2>
+    <p class="section-sub">قارن بنفسك — المنتج الذكي مقابل البطاطا العادية</p>
+    <div class="why-grid">
+      <div class="why-card">
+        <span class="why-icon">⚡</span>
+        <div class="why-title">جاهزية فورية للطهي</div>
+        <div class="why-text">وفّر على عمالك ساعات يومية في التقشير والتقطيع والغسيل. بمجرد وصول الشحنة — الطهي مباشرة.</div>
+        <span class="why-highlight">توفير في وقت العمل</span>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">💰</span>
+        <div class="why-title">0% هدر في الوزن</div>
+        <div class="why-text">البطاطا العادية تفقد 25% من وزنها في القشور والتالف. مع منتجاتنا: كل جرام دفعت عليه = كل جرام تستخدمه.</div>
+        <span class="why-highlight">توفير 25% في التكلفة الفعلية</span>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">🧊</span>
+        <div class="why-title">تغليف Vacuum متطور</div>
+        <div class="why-text">تقنية سحب الهواء تضمن بقاء البطاطا طازجة في التبريد لمدة 7 أيام كاملة — دون تغيير في اللون أو الطعم أو الملمس.</div>
+        <span class="why-highlight">طازجة 7 أيام مضمونة</span>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">🧼</span>
+        <div class="why-title">نظافة مضمونة متعددة المراحل</div>
+        <div class="why-text">غسيل بمياه مصفاة عبر مراحل متعددة. خط إنتاج آلي يضمن أعلى معايير النظافة والتعقيم. لا إضافات كيميائية ضارة إطلاقاً.</div>
+        <span class="why-highlight">100% طبيعي بدون مواد حافظة</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUBSCRIPTIONS -->
+<section id="subscriptions">
+  <div class="section-inner">
+    <div class="section-tag">📦 اشتراكات المطاعم</div>
+    <h2 class="section-title">خطط الاشتراك للمطاعم (B2B)</h2>
+    <p class="section-sub">جدولة التوصيل تلقائياً — لا تتصل، لا تطلب — نصلك في الوقت المناسب</p>
+    <div class="plans-grid">
+
+      <div class="plan-card">
+        <div class="plan-name">خطة المطعم الصغير</div>
+        <div class="plan-price">18,000 <small>دج/أسبوع</small></div>
+        <div class="plan-qty">حتى 30 كغ / يوم</div>
+        <ul class="plan-features">
+          <li>توصيل 5 أيام/أسبوع</li>
+          <li>اختيار وقت التوصيل</li>
+          <li>خصم 10% على السعر العادي</li>
+          <li>دفع أسبوعي</li>
+        </ul>
+        <button class="plan-btn" onclick="contactPlan('الصغير')">اشترك الآن</button>
+      </div>
+
+      <div class="plan-card featured">
+        <div class="popular-badge">الأكثر اختياراً</div>
+        <div class="plan-name">خطة المطعم المتوسط</div>
+        <div class="plan-price">38,000 <small>دج/أسبوع</small></div>
+        <div class="plan-qty">حتى 70 كغ / يوم</div>
+        <ul class="plan-features">
+          <li>توصيل يومي (7 أيام)</li>
+          <li>تحديد وقت دقيق للتوصيل</li>
+          <li>خصم 15% على السعر العادي</li>
+          <li>دفع شهري مريح</li>
+          <li>أولوية في الطلبات الطارئة</li>
+        </ul>
+        <button class="plan-btn" onclick="contactPlan('المتوسط')">اشترك الآن</button>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-name">خطة الفندق / المطعم الكبير</div>
+        <div class="plan-price">سعر خاص</div>
+        <div class="plan-qty">+100 كغ / يوم</div>
+        <ul class="plan-features">
+          <li>توصيل يومي متعدد الرحلات</li>
+          <li>تخصيص القطع حسب الطلب</li>
+          <li>خصم يصل إلى 20%</li>
+          <li>مندوب حساب مخصص</li>
+          <li>عقد سنوي مع ضمان الأسعار</li>
+        </ul>
+        <button class="plan-btn" onclick="contactPlan('المؤسسي')">تواصل للتفاوض</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-inner">
+    <div class="section-tag">💬 آراء عملائنا</div>
+    <h2 class="section-title">ماذا يقول أصحاب المطاعم؟</h2>
+    <p class="section-sub">شركاؤنا يتحدثون عن تجربتهم الحقيقية مع Express Potatoes</p>
+    <div class="testimonials-grid">
+
+      <div class="testimonial-card">
+        <div class="quote-mark">"</div>
+        <div class="testimonial-text">منذ بدأنا العمل مع Express Potatoes، وفّرنا ساعتين يومياً في عمل المطبخ. البطاطا تصل جاهزة تماماً والقرمشة بعد القلي لا تُضاهى!</div>
+        <div class="testimonial-author">
+          <div class="author-avatar">👨‍🍳</div>
+          <div>
+            <div class="author-name">أحمد بن سالم</div>
+            <div class="author-role">صاحب مطعم Fast Food — عنابة</div>
+            <div class="stars">★★★★★</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="quote-mark">"</div>
+        <div class="testimonial-text">التغليف الفراغي حل مشكلة التخزين عندنا. أطلب مرتين في الأسبوع وتبقى البطاطا طازجة حتى آخر كيس. منتج ممتاز للفنادق!</div>
+        <div class="testimonial-author">
+          <div class="author-avatar">🏨</div>
+          <div>
+            <div class="author-name">كريم بوعلام</div>
+            <div class="author-role">مدير مطبخ — فندق 4 نجوم</div>
+            <div class="stars">★★★★★</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="quote-mark">"</div>
+        <div class="testimonial-text">حسبت الفارق: كنت أشتري 10 كغ بطاطا عادية وأحصل على 7.5 كغ فعلياً. الآن أدفع على 10 كغ وأستخدم 10 كغ فعلاً. وفّرت 25% من التكلفة!</div>
+        <div class="testimonial-author">
+          <div class="author-avatar">👩‍🍳</div>
+          <div>
+            <div class="author-name">فاطمة بوزيدي</div>
+            <div class="author-role">صاحبة مطعم تقليدي — قسنطينة</div>
+            <div class="stars">★★★★★</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="section-tag" style="background:rgba(249,115,22,0.2);color:var(--orange)">📞 تواصل معنا</div>
+    <h2 class="section-title">ابدأ طلبك اليوم</h2>
+    <p class="section-sub">فريقنا جاهز لمساعدتك في اختيار الخطة المناسبة لمطعمك أو فندقك</p>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div>
+            <div class="contact-label">الهاتف / واتساب</div>
+            <div class="contact-value">+213 555 000 000</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📧</div>
+          <div>
+            <div class="contact-label">البريد الإلكتروني</div>
+            <div class="contact-value">contact@expresspotatoes.dz</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div>
+            <div class="contact-label">المقر الرئيسي</div>
+            <div class="contact-value">عنابة، الجزائر</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">🕐</div>
+          <div>
+            <div class="contact-label">ساعات العمل</div>
+            <div class="contact-value">السبت – الخميس: 7:00 ص – 6:00 م</div>
+          </div>
+        </div>
+      </div>
+      <form class="contact-form" onsubmit="submitForm(event)">
+        <input type="text" class="form-input" placeholder="الاسم الكامل" required>
+        <input type="tel" class="form-input" placeholder="رقم الهاتف" required>
+        <select class="form-input">
+          <option value="">نوع العمل</option>
+          <option>مطعم سريع</option>
+          <option>مطعم تقليدي</option>
+          <option>فندق</option>
+          <option>عائلة / منزل</option>
+          <option>موزع / تاجر جملة</option>
+        </select>
+        <textarea class="form-input" placeholder="اكتب طلبك أو استفسارك هنا..."></textarea>
+        <button type="submit" class="form-submit">📨 أرسل الطلب</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>🥔 <strong>Express Potatoes</strong> — بطاطا طازجة جاهزة للطهي | عنابة، الجزائر</p>
+  <p style="margin-top:0.5rem">جميع الحقوق محفوظة © 2025</p>
+</footer>
+
+<!-- CART FLOAT -->
+<button class="cart-float" id="cart-btn" style="display:none" onclick="showCart()">
+  🛒 السلة
+  <span class="cart-count" id="cart-count">0</span>
+</button>
+
+<script>
+let cart = [];
+
+function addToCart(name) {
+  cart.push(name);
+  document.getElementById('cart-count').textContent = cart.length;
+  document.getElementById('cart-btn').style.display = 'flex';
+  showNotif('✓ تمت إضافة ' + name + ' للسلة');
+}
+
+function showNotif(msg) {
+  const n = document.getElementById('notif');
+  n.textContent = msg;
+  n.classList.add('show');
+  setTimeout(() => n.classList.remove('show'), 2500);
+}
+
+function selectSize(btn) {
+  const siblings = btn.parentElement.querySelectorAll('.size-badge');
+  siblings.forEach(s => s.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function scrollToSection(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+}
+
+function calculate() {
+  const price = parseFloat(document.getElementById('calc-product').value);
+  const qty = parseFloat(document.getElementById('calc-qty').value) || 0;
+  const days = parseFloat(document.getElementById('calc-days').value);
+
+  const weeklyQty = qty * days;
+  const weeklyPrice = weeklyQty * price;
+
+  let discount = 0.10;
+  let discountLabel = 'خصم 10% على الطلبات المستمرة';
+  if (weeklyQty >= 200) { discount = 0.20; discountLabel = 'خصم 20% — عميل مميز!'; }
+  else if (weeklyQty >= 100) { discount = 0.15; discountLabel = 'خصم 15% على الكميات الكبيرة'; }
+
+  const discounted = weeklyPrice * (1 - discount);
+
+  document.getElementById('weekly-qty').textContent = weeklyQty.toLocaleString('ar') + ' كغ';
+  document.getElementById('weekly-price').textContent = weeklyPrice.toLocaleString('ar') + ' دج';
+  document.getElementById('discounted-price').textContent = Math.round(discounted).toLocaleString('ar') + ' دج';
+  document.getElementById('discount-label').textContent = '✓ ' + discountLabel;
+}
+
+function contactPlan(plan) {
+  showNotif('✓ سيتواصل معك فريقنا بخصوص خطة ' + plan);
+  setTimeout(() => scrollToSection('contact'), 1000);
+}
+
+function showCart() {
+  if (cart.length === 0) { showNotif('السلة فارغة!'); return; }
+  const items = [...new Set(cart)].map(i => `${i} (×${cart.filter(x=>x===i).length})`).join('، ');
+  showNotif('طلبك: ' + items);
+}
+
+function submitForm(e) {
+  e.preventDefault();
+  showNotif('✓ تم إرسال طلبك! سنتواصل معك قريباً');
+  e.target.reset();
+}
+
+calculate();
+</script>
+</body>
+</html>
