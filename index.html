@@ -184,8 +184,9 @@
   /* PRODUCTS */
   #products { background: white; }
   .products-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr);
+    display: grid; grid-template-columns: repeat(1, 1fr);
     gap: 1.5rem; margin-top: 2.5rem;
+    max-width: 500px;
   }
   .product-card {
     border-radius: 20px; overflow: hidden;
@@ -437,7 +438,7 @@
   @media (max-width: 900px) {
     .hero-inner { grid-template-columns: 1fr; }
     .hero h1 { font-size: 2.5rem; }
-    .products-grid { grid-template-columns: 1fr 1fr; }
+    .products-grid { grid-template-columns: 1fr; }
     .plans-grid { grid-template-columns: 1fr; }
     .testimonials-grid { grid-template-columns: 1fr; }
     .contact-grid { grid-template-columns: 1fr; }
@@ -513,9 +514,9 @@
 <!-- PRODUCTS -->
 <section id="products">
   <div class="section-inner">
-    <div class="section-tag">🛍️ كتالوج المنتجات</div>
-    <h2 class="section-title">اختر منتجك المناسب</h2>
-    <p class="section-sub">كل منتج مُعد بعناية لخدمة احتياجات مختلفة — مطاعم، فنادق، أو منازل</p>
+    <div class="section-tag">🛍️ المنتج الحصري</div>
+    <h2 class="section-title">أصابع البطاطا المميزة</h2>
+    <p class="section-sub">تقطيع دقيق بآلية عالية، قرمشة مثالية بعد القلي — المنتج الأول والوحيد من نوعه في السوق</p>
     <div class="products-grid">
 
       <div class="product-card">
@@ -523,7 +524,7 @@
         <div class="product-body">
           <span class="product-tag">الأكثر طلباً</span>
           <div class="product-name">أصابع البطاطا (French Fries)</div>
-          <div class="product-desc">مقطعة بدقة آلية — مثالية للمطاعم السريعة. تتمتع بقرمشة ذهبية مثالية بعد القلي.</div>
+          <div class="product-desc">مقطعة بدقة آلية — مثالية للمطاعم السريعة والفنادق. تتمتع بقرمشة ذهبية مثالية بعد القلي.</div>
           <div class="product-sizes">
             <span class="size-badge active" onclick="selectSize(this)">9×9 ملم</span>
             <span class="size-badge" onclick="selectSize(this)">12×12 ملم</span>
@@ -533,43 +534,6 @@
             <div style="font-size:0.78rem;color:var(--green);font-weight:700">متوفر</div>
           </div>
           <button class="add-btn" onclick="addToCart('أصابع البطاطا')">+ أضف للطلب</button>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img">🥔</div>
-        <div class="product-body">
-          <span class="product-tag">للمطاعم التقليدية</span>
-          <div class="product-name">البطاطا الدائرية (Rondelles)</div>
-          <div class="product-desc">شرائح دائرية منتظمة — رائعة للمطاعم التقليدية والطهي المنزلي المتميز.</div>
-          <div class="product-sizes">
-            <span class="size-badge active" onclick="selectSize(this)">كيس 1 كغ</span>
-            <span class="size-badge" onclick="selectSize(this)">كيس 5 كغ</span>
-            <span class="size-badge" onclick="selectSize(this)">كيس 10 كغ</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div class="product-price">400 دج <span>/ كغ</span></div>
-            <div style="font-size:0.78rem;color:var(--green);font-weight:700">متوفر</div>
-          </div>
-          <button class="add-btn" onclick="addToCart('البطاطا الدائرية')">+ أضف للطلب</button>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img">🎲</div>
-        <div class="product-body">
-          <span class="product-tag">للفنادق والشوربات</span>
-          <div class="product-name">مكعبات البطاطا (Cubes)</div>
-          <div class="product-desc">مكعبات منتظمة مثالية للشوربات، السلطات، وتجهيزات المطابخ الفندقية الاحترافية.</div>
-          <div class="product-sizes">
-            <span class="size-badge active" onclick="selectSize(this)">2×2 سم</span>
-            <span class="size-badge" onclick="selectSize(this)">3×3 سم</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div class="product-price">380 دج <span>/ كغ</span></div>
-            <div style="font-size:0.78rem;color:var(--green);font-weight:700">متوفر</div>
-          </div>
-          <button class="add-btn" onclick="addToCart('مكعبات البطاطا')">+ أضف للطلب</button>
         </div>
       </div>
 
@@ -590,8 +554,6 @@
             <label class="calc-label">نوع المنتج</label>
             <select class="calc-input" id="calc-product" onchange="calculate()">
               <option value="450">أصابع البطاطا — 450 دج/كغ</option>
-              <option value="400">البطاطا الدائرية — 400 دج/كغ</option>
-              <option value="380">مكعبات البطاطا — 380 دج/كغ</option>
             </select>
           </div>
           <div class="calc-field">
